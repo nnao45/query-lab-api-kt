@@ -25,7 +25,16 @@ docker-run:
 docker-push: docker-login
     docker push {{ DOCKER_REPO }}/{{ APP_NAME }}:{{ GIT_HASH }}
 
-docker-release: docker-build docker-push
+docker-base-build:
+    docker build -t {{ DOCKER_REPO }}/{{ APP_NAME }}:base .
+
+docker-base-run:
+    docker run -it --rm -p 8081:8081 --env-file=./.env {{ DOCKER_REPO }}/{{ APP_NAME }}:base
+
+docker-base-push: docker-login
+    docker push {{ DOCKER_REPO }}/{{ APP_NAME }}:base
+
+docker--base-release: docker-base-build docker-base-push
 
 mysql-db-is-exist:
     #!/bin/bash
