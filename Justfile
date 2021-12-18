@@ -7,6 +7,12 @@ MYSQL_DOCKER := "jqapi-test-mysql"
 MYSQL_DOCKER_EXISTS_FLAG := `if [ ! -z ${CIRCLECI:-} ]; then echo 1; exit 0; fi; docker ps --format "{{ .Names }}" --filter "name=jqapi-test-mysql" | wc -l`
 MYSQL_VERSION := "8.0.25"
 
+lint:
+    ktlint "src/main/**/*.kt" '!src/test/**/*.kt'
+
+lint-fmt:
+    ktlint -F "src/main/**/*.kt" '!src/test/**/*.kt'
+
 docker-login:
     docker login
 

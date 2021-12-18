@@ -10,6 +10,7 @@ plugins {
     id("com.google.cloud.tools.jib") version "3.1.4"
     id("com.palantir.git-version") version "0.12.3"
     id("com.github.johnrengelman.shadow") version "7.1.1"
+    id("org.jlleitschuh.gradle.ktlint") version "10.2.0"
     id("java")
 }
 
@@ -34,13 +35,12 @@ dependencies {
     implementation("ch.qos.logback:logback-classic:$logback_version")
     // rdb
     implementation("org.jetbrains.exposed:exposed-core:$exposed_version")
+    implementation("org.jetbrains.exposed:exposed-dao:$exposed_version")
+    implementation("org.jetbrains.exposed:exposed-jdbc:$exposed_version")
+    implementation("org.jetbrains.exposed:exposed-java-time:$exposed_version")
     implementation("mysql:mysql-connector-java:$mysql_version")
     testImplementation("io.ktor:ktor-server-tests:$ktor_version")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
-}
-
-tasks.register<JavaExec>("runMain") {
-    main = "com.nnao45.MainKt"
 }
 
 jib {
