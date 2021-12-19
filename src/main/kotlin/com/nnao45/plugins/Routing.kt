@@ -1,6 +1,7 @@
 package com.nnao45.plugins
 
 import com.nnao45.infra.logger.logger
+import com.nnao45.infra.repo.UserRepoImpl
 import io.ktor.application.*
 import io.ktor.http.*
 import io.ktor.request.*
@@ -8,7 +9,7 @@ import io.ktor.response.*
 import io.ktor.routing.*
 import java.time.LocalDateTime
 
-fun Application.configureRouting() {
+fun Application.configureRouting(repo: UserRepoImpl) {
     logger.info("start routing!")
 
     // Starting point for a Ktor app:
@@ -16,7 +17,9 @@ fun Application.configureRouting() {
         get("/") {
             call.respondText("${LocalDateTime.now()}")
         }
-    }
-    routing {
+
+        get("/exec") {
+            call.respondText("${repo.getUser()}")
+        }
     }
 }
