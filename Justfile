@@ -7,6 +7,9 @@ MYSQL_DOCKER := "jqapi-test-mysql"
 MYSQL_DOCKER_EXISTS_FLAG := `if [ ! -z ${CIRCLECI:-} ]; then echo 1; exit 0; fi; docker ps --format "{{ .Names }}" --filter "name=jqapi-test-mysql" | wc -l`
 MYSQL_VERSION := "8.0.25"
 
+run:
+    ./gradlew runMain
+
 docker-login:
     docker login
 

@@ -30,8 +30,11 @@ repositories {
 }
 
 dependencies {
+    // ktor
     implementation("io.ktor:ktor-server-core:$ktor_version")
     implementation("io.ktor:ktor-server-netty:$ktor_version")
+    // log
+    implementation("io.github.microutils:kotlin-logging-jvm:2.1.20")
     implementation("ch.qos.logback:logback-classic:$logback_version")
     // rdb
     implementation("org.jetbrains.exposed:exposed-core:$exposed_version")
@@ -39,8 +42,14 @@ dependencies {
     implementation("org.jetbrains.exposed:exposed-jdbc:$exposed_version")
     implementation("org.jetbrains.exposed:exposed-java-time:$exposed_version")
     implementation("mysql:mysql-connector-java:$mysql_version")
+    // test
     testImplementation("io.ktor:ktor-server-tests:$ktor_version")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
+}
+
+task("runMain", JavaExec::class) {
+    main = "com.nnao45.ApplicationKt"
+    classpath = sourceSets["main"].runtimeClasspath
 }
 
 jib {
