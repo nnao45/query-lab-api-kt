@@ -52,6 +52,11 @@ task("runMain", JavaExec::class) {
     classpath = sourceSets["main"].runtimeClasspath
 }
 
+task("runMigrate", JavaExec::class) {
+    main = "com.nnao45.migration.ApplicationKt"
+    classpath = sourceSets["main"].runtimeClasspath
+}
+
 jib {
     from {
         image = "docker://nnao45/query-lab-api-kt:base"
