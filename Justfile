@@ -87,14 +87,12 @@ setup-mysql-db:
     echo 'CREATE USER '\'admin\''@'\'%\'' IDENTIFIED BY '\'${MYSQL_PASSWORD}\''' | mysql -h${MYSQL_HOST} -uroot -p${MYSQL_PASSWORD} 2>/dev/null
     echo 'GRANT ALL On *.* To admin@'\'%\'';' | mysql -h${MYSQL_HOST} -uroot -p${MYSQL_PASSWORD} 2>/dev/null
     echo 'set global time_zone = "Asia/Tokyo"' | mysql -h${MYSQL_HOST} -u${MYSQL_USER} -p${MYSQL_PASSWORD} 2>/dev/null
+    ./gradlew runMigrate
 
 inject-data-mysql-db:
-    mysql -h${MYSQL_HOST} -uroot -p${MYSQL_PASSWORD} -D${MYSQL_DB} < ./tools/db_data/fulldb-11-12-2021-15-57-beta.sql
+    mysql -h${MYSQL_HOST} -uroot -p${MYSQL_PASSWORD} -D${MYSQL_DB} < ./src/main/resources/data/fulldb-11-12-2021-15-57-beta.sql
 
-run-test-query-mysql-db:
-    mysql -h${MYSQL_HOST} -uroot -p${MYSQL_PASSWORD} -D${MYSQL_DB} < ./tools/query/test_query_1.sql
-
-run-mysql-db: lunch-mysql-db check-mysql-db setup-mysql-db
+run-mysql-db: lunch-mysql-db check-mysql-db setup-mysql-db inject-data-mysql-db
 
 clean-mysql-db:
     #!/bin/bash
