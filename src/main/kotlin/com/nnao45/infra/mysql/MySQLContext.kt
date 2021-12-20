@@ -11,3 +11,4 @@ fun initMysqlClient() {
     val mysqlOpts = System.getenv("MYSQL_OPTS") ?: "useSSL=false&loc=Asia%2FTokyo"
     Database.connect("jdbc:mysql://$mysqlHost:$mysqlPort/$mysqlDB?$mysqlOpts", "com.mysql.cj.jdbc.Driver", mysqlUser, mysqlPassword)
 }
+
