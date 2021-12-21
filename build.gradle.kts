@@ -67,6 +67,7 @@ jib {
     }
     container {
         jvmFlags = listOf("-Xms512m", "-Xmx4096m", "-Xdebug")
+        mainClass = "com.nnao45.ApplicationKt"
         ports = listOf("8081/tcp")
         format = com.google.cloud.tools.jib.api.buildplan.ImageFormat.OCI
     }
