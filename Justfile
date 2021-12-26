@@ -35,6 +35,20 @@ docker-base-push: docker-login
 
 docker-base-release: docker-base-build docker-base-push
 
+docker-ddl-build:
+	docker rmi -f {{ DOCKER_REPO }}/ddl-docker:latest
+	docker build -t {{ DOCKER_REPO }}/ddl-docker:latest . -f=ddl.Dockerfile
+	docker tag {{ DOCKER_REPO }}/ddl-docker:latest {{ DOCKER_REPO }}/ddl-docker:{{ GIT_HASH }}
+
+docker-ddl-push: docker-login
+	docker push {{ DOCKER_REPO }}/ddl-docker:latest
+	docker push {{ DOCKER_REPO }}/ddl-docker:{{ GIT_HASH }}
+
+docker-ddl-release: docker-ddl-build docker-ddl-push
+
+moco:
+    kubectl moco -n moco-cluster mysql -it -u moco-writable test
+
 mysql-db-is-exist:
     #!/bin/bash
     echo MYSQL_DOCKER_EXISTS_FLAG is {{ MYSQL_DOCKER_EXISTS_FLAG }}
