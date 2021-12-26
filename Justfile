@@ -97,7 +97,7 @@ lunch-mysql-db:
     fi
 
 setup-mysql-db:
-    mysql -h${MYSQL_HOST} -uroot -p${MYSQL_PASSWORD} -D${MYSQL_DB} < ./src/main/resources/data/fulldb-11-12-2021-15-57-beta.sql
+    mysql -h${MYSQL_HOST} -uroot -p${MYSQL_PASSWORD} < ./src/main/resources/data/fulldb-11-12-2021-15-57-beta.sql
 
 run-mysql-db: lunch-mysql-db check-mysql-db setup-mysql-db
 
