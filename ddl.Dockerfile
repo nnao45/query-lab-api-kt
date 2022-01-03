@@ -44,4 +44,4 @@ RUN mkdir /app
 WORKDIR /app
 COPY src/main/resources/data/fulldb-11-12-2021-15-57-beta.sql .
 
-CMD ["/bin/sh", "-c", "mysql -uadmin -hmoco-moco-cluster-01-primary.moco-cluster.svc.cluster.local -pmypwds -Djq_api < /app/fulldb-11-12-2021-15-57-beta.sql"]
+CMD ["/bin/sh", "-c", "mysql -umoco-admin -hmoco-moco-cluster-01-primary.moco-cluster.svc.cluster.local < /app/fulldb-11-12-2021-15-57-beta.sql"]
