@@ -7,7 +7,7 @@ import io.ktor.application.*
 import io.ktor.response.*
 import io.ktor.routing.*
 
-fun Application.configureRouting(repo: FibonacchiRepoImpl) {
+fun Application.configureRouting(fibonacchiRepoImpl: FibonacchiRepoImpl, benchmarkRepoImpl: BenchmarkRepoImpl) {
     logger.info("start routing!")
 
     // Starting point for a Ktor app:
@@ -17,8 +17,12 @@ fun Application.configureRouting(repo: FibonacchiRepoImpl) {
         }
 
         get("/exec") {
+            call.respondText("${benchmarkRepoImpl.exec()}")
+        }
+
+        get("/fib") {
             val param: Long =  call.request.queryParameters["n"]?.toLong() ?: 10
-            call.respondText("${repo.exec(param)}")
+            call.respondText("${fibonacchiRepoImpl.exec(param)}")
         }
     }
 }

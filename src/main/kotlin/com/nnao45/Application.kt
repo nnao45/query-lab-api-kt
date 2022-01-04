@@ -12,7 +12,7 @@ import io.ktor.server.netty.*
 fun main() {
     embeddedServer(Netty, port = 8081, host = "0.0.0.0") {
         install(CallLogging)
-        configureRouting(FibonacchiRepoImpl)
-        // configureDDL()
+        configureRouting(FibonacchiRepoImpl, BenchmarkRepoImpl)
+        configureDDL()
     }.start(wait = true)
 }
