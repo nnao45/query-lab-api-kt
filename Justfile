@@ -94,10 +94,10 @@ lunch-mysql-db:
     fi
 
 setup-mysql-db:
-    echo "CREATE DATABASE IF NOT EXISTS ${MYSQL_DB} DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci" | mysql -h${MYSQL_HOST} -u${MYSQL_ROOT} -p${MYSQL_PASSWORD} 2>/dev/null
-    echo 'CREATE USER '\'admin\''@'\'%\'' IDENTIFIED BY '\'${MYSQL_PASSWORD}\''' | mysql -h${MYSQL_HOST} -u${MYSQL_ROOT} -p${MYSQL_PASSWORD} 2>/dev/null
-    echo 'GRANT ALL On *.* To admin@'\'%\'';' | mysql -h${MYSQL_HOST} -u${MYSQL_ROOT} -p${MYSQL_PASSWORD} 2>/dev/null
-    echo 'set global time_zone = "Asia/Tokyo"' | mysql -h${MYSQL_HOST} -u${MYSQL_USER} -p${MYSQL_PASSWORD} 2>/dev/null
+    echo "CREATE DATABASE IF NOT EXISTS ${MYSQL_DB} DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci" | mysql -h${MYSQL_HOST} -u${MYSQL_ROOT}
+    echo 'CREATE USER '\'admin\''@'\'%\'' IDENTIFIED BY '\'${MYSQL_PASSWORD}\''' | mysql -h${MYSQL_HOST} -u${MYSQL_ROOT}
+    echo 'GRANT ALL On *.* To admin@'\'%\'';' | mysql -h${MYSQL_HOST} -u${MYSQL_ROOT}
+    echo 'set global time_zone = "Asia/Tokyo"' | mysql -h${MYSQL_HOST} -u${MYSQL_USER} -p${MYSQL_PASSWORD}
     ./gradlew runMigrate
 
 inject-mysql-db:
