@@ -9,6 +9,8 @@ ARG MYSQL_VERSION=8.0.25
 RUN set -eux; \
     apt-get update && \
     apt-get install -y --no-install-recommends \
+        git \
+        docker \
         ca-certificates \
         wget \
         # MySQL系
