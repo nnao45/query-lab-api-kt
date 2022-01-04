@@ -4,7 +4,7 @@ GIT_HASH := `git rev-parse HEAD`
 
 DOCKER_REPO := "nnao45"
 MYSQL_DOCKER := "jqapi-test-mysql"
-MYSQL_DOCKER_EXISTS_FLAG := `if [ ! -z ${CIRCLECI:-} ]; then echo 1; exit 0; fi; docker ps --format "{{ .Names }}" --filter "name=jqapi-test-mysql" | wc -l`
+MYSQL_DOCKER_EXISTS_FLAG := `if [ ! -z ${CIRCLECI:-} ]; then echo 1; exit 0; fi; if [ ! -z ${IS_KUBE:-} ]; then echo 1; exit 0; fi; docker ps --format "{{ .Names }}" --filter "name=jqapi-test-mysql" | wc -l`
 MYSQL_VERSION := "8.0.25"
 
 run:
