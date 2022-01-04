@@ -86,7 +86,7 @@ lunch-mysql-db:
         docker run --name {{ MYSQL_DOCKER }} \
             --rm \
             -d \
-            -e MYSQL_ROOT_PASSWORD=${MYSQL_PASSWORD} \
+            -e MYSQL_ALLOW_EMPTY_PASSWORD=yes \
             -p ${MYSQL_PORT}:${MYSQL_PORT} mysql:{{ MYSQL_VERSION }} \
             --character-set-server=utf8mb4 \
             --default-authentication-plugin=mysql_native_password \
