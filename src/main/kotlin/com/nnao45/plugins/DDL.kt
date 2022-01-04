@@ -7,10 +7,7 @@ import com.nnao45.infra.logger.logger
 import com.nnao45.infra.mysql.initMysqlClient
 import com.nnao45.infra.mysql.utils.execAndMap
 import org.jetbrains.exposed.sql.SchemaUtils
-import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
-import java.io.File
-import java.nio.charset.StandardCharsets.UTF_8
 
 private fun doDDL(sql: String) {
     transaction {
