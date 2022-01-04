@@ -49,7 +49,7 @@ RUN mysql --version
 RUN mysql_random_data_load --version test test 1
 
 CMD echo "CREATE DATABASE IF NOT EXISTS ${MYSQL_DB} DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci" | mysql -h${HOST} -umoco-admin && \
-    echo 'CREATE USER '\'admin\''@'\'%\'' IDENTIFIED BY '\'${PASSWORD}\''' | mysql -h${HOST} -umoco-admin && \
+    echo 'CREATE USER IF NOT EXISTS '\'admin\''@'\'%\'' IDENTIFIED BY '\'${PASSWORD}\''' | mysql -h${HOST} -umoco-admin && \
     echo 'GRANT ALL On *.* To admin@'\'%\'';' | mysql -h${HOST} -umoco-admin && \
     echo 'set global time_zone = "Asia/Tokyo"' | mysql -h${HOST} -umoco-admin && \
     mysql_random_data_load ${MYSQL_DB} user       100000 --user=${USER} --password=${PASSWORD} --host=${HOST} && \
