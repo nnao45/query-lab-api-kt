@@ -1,4 +1,4 @@
-FROM debian:11.1-slim
+FROM openjdk:11-jre
 
 ARG USER=admin
 ARG PASSWORD=mypwds
@@ -19,15 +19,16 @@ RUN set -eux; \
         libnuma1 \
         libsasl2-2
 
-# mysql clientのインストール
 RUN mkdir /tmp/lib
 WORKDIR  /tmp/lib
 
+# mysql_random_data_load のインストール
 RUN wget https://github.com/Percona-Lab/mysql_random_data_load/releases/download/v0.1.12/mysql_random_data_load_0.1.12_Linux_x86_64.tar.gz
 RUN tar xvfz mysql_random_data_load_0.1.12_Linux_x86_64.tar.gz
 RUN chmod a+x mysql_random_data_load
 RUN mv mysql_random_data_load /bin/
 
+# mysql client のインストール
 RUN wget https://dev.mysql.com/get/Downloads/MySQL-8.0/mysql-common_$MYSQL_VERSION-1debian10_amd64.deb \
     https://dev.mysql.com/get/Downloads/MySQL-8.0/libmysqlclient21_$MYSQL_VERSION-1debian10_amd64.deb \
     https://dev.mysql.com/get/Downloads/MySQL-8.0/mysql-community-client-core_$MYSQL_VERSION-1debian10_amd64.deb \
@@ -43,15 +44,23 @@ RUN dpkg -i \
     libmysqlclient-dev_$MYSQL_VERSION-1debian10_amd64.deb \
     mysql-community-client-plugins_$MYSQL_VERSION-1debian10_amd64.deb
 
+# just のインストール
+RUN wget https://github.com/casey/just/releases/download/0.10.5/just-0.10.5-x86_64-unknown-linux-musl.tar.gz
+RUN tar xvfz just-0.10.5-x86_64-unknown-linux-musl.tar.gz
+RUN chmod a+x just
+RUN mv just /bin/
+
 RUN rm -rf /tmp/lib
+
+RUN mkdir /app
+WORKDIR /app
+
+# ディレクトリのコピー
+COPY . .
 
 RUN mysql --version
 RUN mysql_random_data_load --version test test 1
+RUN just --version
+RUN ./gradlew --version
 
-CMD echo "CREATE DATABASE IF NOT EXISTS ${MYSQL_DB} DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci" | mysql -h${HOST} -umoco-admin && \
-    echo 'CREATE USER IF NOT EXISTS '\'admin\''@'\'%\'' IDENTIFIED BY '\'${PASSWORD}\''' | mysql -h${HOST} -umoco-admin && \
-    echo 'GRANT ALL On *.* To admin@'\'%\'';' | mysql -h${HOST} -umoco-admin && \
-    echo 'set global time_zone = "Asia/Tokyo"' | mysql -h${HOST} -umoco-admin && \
-    mysql_random_data_load ${MYSQL_DB} user       100000 --user=${USER} --password=${PASSWORD} --host=${HOST} && \
-    mysql_random_data_load ${MYSQL_DB} post       100000 --user=${USER} --password=${PASSWORD} --host=${HOST} && \
-    mysql_random_data_load ${MYSQL_DB} foot_stamp 100000 --user=${USER} --password=${PASSWORD} --host=${HOST}
+CMD just setup-mysql-db && just inject-mysql-db
