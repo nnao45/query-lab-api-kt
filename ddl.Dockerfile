@@ -45,7 +45,6 @@ RUN dpkg -i \
 
 RUN rm -rf /tmp/lib
 
-# 動くか確認をする
 RUN mysql --version
 RUN mysql_random_data_load --version test test 1
 
