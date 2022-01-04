@@ -29,8 +29,7 @@ fun configureDDL() {
             FootStamp
         )
     }
-    transaction(
-    ) {
+    transaction {
         if (0L == User.selectAll().count()) {
             val insertSQLString = File("src/main/resources/data/fulldb-11-12-2021-15-57-beta.sql").readText(UTF_8)
             insertSQLString.execAndMap { it.getBytes(1) }
