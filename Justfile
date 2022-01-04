@@ -25,7 +25,7 @@ docker-push: docker-login
 docker-release: docker-build docker-push
 
 docker-base-build:
-    docker build -t {{ DOCKER_REPO }}/{{ APP_NAME }}:base .
+    docker build -t {{ DOCKER_REPO }}/{{ APP_NAME }}:base -f base.Dockerfile .
 
 docker-base-run:
     docker run -it --rm -p 8081:8081 --env-file=./.env {{ DOCKER_REPO }}/{{ APP_NAME }}:base
@@ -34,6 +34,17 @@ docker-base-push: docker-login
     docker push {{ DOCKER_REPO }}/{{ APP_NAME }}:base
 
 docker-base-release: docker-base-build docker-base-push
+
+docker-ddl-build:
+	docker rmi -f {{ DOCKER_REPO }}/ddl-docker:latest
+	docker build -t {{ DOCKER_REPO }}/ddl-docker:latest . -f=ddl.Dockerfile
+	docker tag {{ DOCKER_REPO }}/ddl-docker:latest {{ DOCKER_REPO }}/ddl-docker:{{ GIT_HASH }}
+
+docker-ddl-push: docker-login
+	docker push {{ DOCKER_REPO }}/ddl-docker:latest
+	docker push {{ DOCKER_REPO }}/ddl-docker:{{ GIT_HASH }}
+
+docker-ddl-release: docker-ddl-build docker-ddl-push
 
 mysql-db-is-exist:
     #!/bin/bash
@@ -89,10 +100,12 @@ setup-mysql-db:
     echo 'set global time_zone = "Asia/Tokyo"' | mysql -h${MYSQL_HOST} -u${MYSQL_USER} -p${MYSQL_PASSWORD} 2>/dev/null
     ./gradlew runMigrate
 
-inject-data-mysql-db:
-    mysql -h${MYSQL_HOST} -uroot -p${MYSQL_PASSWORD} -D${MYSQL_DB} < ./src/main/resources/data/fulldb-11-12-2021-15-57-beta.sql
+inject-mysql-db:
+    mysql_random_data_load ${MYSQL_DB} user       100000 --user=admin --password=mypwds
+    mysql_random_data_load ${MYSQL_DB} post       100000 --user=admin --password=mypwds
+    mysql_random_data_load ${MYSQL_DB} foot_stamp 100000 --user=admin --password=mypwds
 
-run-mysql-db: lunch-mysql-db check-mysql-db setup-mysql-db inject-data-mysql-db
+run-mysql-db: lunch-mysql-db check-mysql-db setup-mysql-db inject-mysql-db
 
 clean-mysql-db:
     #!/bin/bash
